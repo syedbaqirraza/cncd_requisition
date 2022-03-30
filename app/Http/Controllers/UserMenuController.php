@@ -77,5 +77,8 @@ class UserMenuController extends Controller
      * @param  \App\Models\UserMenu  $userMenu
      * @return \Illuminate\Http\Response
      */
-
+    public function destroy(UserMenu $userMenu)
+    {
+        //
+    }
 }
