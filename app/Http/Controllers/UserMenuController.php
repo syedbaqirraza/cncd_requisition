@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\UserMenu;
 use Illuminate\Http\Request;
-// bakir gandu
 class UserMenuController extends Controller
 {
     /**
