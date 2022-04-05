@@ -4,8 +4,11 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\UserController;
+use App\Models\PurchaseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +25,18 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::get('/', function () {return redirect()->route('login');});
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::resource('menus',MenuController::class);
 Route::resource('roles',RoleController::class);
 Route::resource('department',DepartmentController::class);
 Route::resource('phase',PhaseController::class);
 Route::resource('status',StatusController::class);
+Route::resource('user',UserController::class);
 Route::resource('role_type',StatusController::class);
+Route::put('user/status/{id}',[UserController::class,'statusUpdate'])->name('user.status.update');
+Route::resource('purchase',PurchaseRequestController::class);
+Route::get('purchase/destroy/{id}',[PurchaseRequestController::class,'destroy'])->name('purchase.destroy');
+Route::get('log',function(){
+    Auth::logout();
+
+        return redirect('login');
+})->name('log');
 

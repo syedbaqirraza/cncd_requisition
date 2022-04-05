@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('request_id');
             $table->string('status');
             $table->text('note');
+            $table->text('forword_to_id');
+            $table->text('forword_from_id');
             $table->timestamps();
         });
     }

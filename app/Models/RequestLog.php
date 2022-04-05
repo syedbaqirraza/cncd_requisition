@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class RequestLog extends Model
 {
     use HasFactory;
+    protected $fillable=[
+        'request_id',
+        'status',
+        'note',
+        'dept_id',
+        'forword_id',
+    ];
 }

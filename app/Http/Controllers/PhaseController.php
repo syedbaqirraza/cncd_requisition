@@ -14,7 +14,7 @@ class PhaseController extends Controller
      */
     public function index()
     {
-        //
+       //
     }
 
     /**
@@ -24,7 +24,7 @@ class PhaseController extends Controller
      */
     public function create()
     {
-        //
+       //
     }
 
     /**
@@ -55,9 +55,9 @@ class PhaseController extends Controller
      * @param  \App\Models\Phase  $phase
      * @return \Illuminate\Http\Response
      */
-    public function edit(Phase $phase)
+    public function edit($id)
     {
-        //
+       //
     }
 
     /**
@@ -67,9 +67,9 @@ class PhaseController extends Controller
      * @param  \App\Models\Phase  $phase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Phase $phase)
+    public function update(Request $request,$id)
     {
-        //
+       //
     }
 
     /**
@@ -78,8 +78,8 @@ class PhaseController extends Controller
      * @param  \App\Models\Phase  $phase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Phase $phase)
+    public function destroy($id)
     {
-        //
+       //
     }
 }

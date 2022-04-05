@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>All Department</h1>
+            <h1>All Status</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">All Department</li>
+              <li class="breadcrumb-item active">All Status</li>
             </ol>
           </div>
         </div>
@@ -30,7 +30,7 @@
                 <thead>
                 <tr>
                   <th>#</th>
-                  <th>Department NAme</th>
+                  <th>Status NAme</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -40,13 +40,13 @@
                         $count=1;
                     @endphp
 
-                    @foreach ($department as $d)
+                    @foreach ($status as $s)
                     <tr>
                         <td>{{$count}}</td>
-                        <td>{{$d->name}}</td>
+                        <td>{{$s->name}}</td>
                         <td>
-                            <button class="btn btn-success float-left" onclick="window.location.href='{{url('department/'.$d->id.'/edit')}}'" >Edit</button>
-                            <form action="{{url('department/'.$d->id)}}" method="post">
+                            <button class="btn btn-success float-left" onclick="window.location.href='{{url('status/'.$s->id.'/edit')}}'" >Edit</button>
+                            <form action="{{url('status/'.$s->id)}}" method="post">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger float-left"  type="submit">Delete</button>
@@ -65,7 +65,7 @@
                 <tfoot>
                     <tr>
                         <th>#</th>
-                        <th>Department Name</th>
+                        <th>Status Name</th>
                         <th>Action</th>
                       </tr>
                 </tfoot>

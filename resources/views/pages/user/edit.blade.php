@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Menu Add</h1>
+            <h1>Update Add</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">Update Menu</li>
+              <li class="breadcrumb-item active">Update Add</li>
             </ol>
           </div>
         </div>
@@ -25,7 +25,7 @@
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Menu Form</h3>
+                  <h3 class="card-title">Update Request Form</h3>
                 </div>
                 @if($errors->any())
                 <div class="alert alert-danger">
@@ -41,15 +41,22 @@
             @if (session()->has('success'))
                 <div class="alert alert-success">{{ session()->get('success') }}</div>
             @endif
-                <form action="{{route('menus.update',['menu'=>$menu->id])}}" method="post">
+
+
+
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form action="{{route('purchase.update',['purchase'=>$request->id])}}" method="post">
                     @csrf
-                    @method("PUT")
+                    @method('put')
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Menu Name</label>
-                      <input type="name" name="name" class="form-control" value="{{$menu->name}}">
+                      <label for="exampleInputEmail1">Write Your Request</label>
+                      <textarea name="description" row='20' class="form-control" placeholder="request description">{{$request->description}}</textarea>
                     </div>
+
                   </div>
+                  <!-- /.card-body -->
 
                   <div class="card-footer">
                     <button type="submit" class="btn btn-primary btn-lg">Submit</button>

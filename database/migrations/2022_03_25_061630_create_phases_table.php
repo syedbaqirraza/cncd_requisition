@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('phases', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('dept_id');
+            $table->integer('req_id');
             $table->timestamps();
         });
     }

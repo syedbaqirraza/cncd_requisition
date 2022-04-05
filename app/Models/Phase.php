@@ -9,6 +9,7 @@ class Phase extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'name'
+        'dept_id',
+        'req_id'
     ];
 }

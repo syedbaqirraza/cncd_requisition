@@ -14,7 +14,8 @@ class StatusController extends Controller
      */
     public function index()
     {
-        //
+        $status=Status::all();
+        return view('pages.admin.status.index',compact('status'));
     }
 
     /**
@@ -24,7 +25,7 @@ class StatusController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.status.add');
     }
 
     /**
@@ -35,7 +36,13 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,
+            [
+                'name'=>'required',
+            ]
+        );
+        Status::create($request->all());
+        return back()->with('success','Status Added Successfullly');
     }
 
     /**
@@ -55,9 +62,10 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function edit(Status $status)
+    public function edit($id)
     {
-        //
+        $status=Status::find($id);
+        return view('pages.admin.status.update',compact('status'));
     }
 
     /**
@@ -67,9 +75,13 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Status $status)
+    public function update(Request $request,$id)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required'
+        ]);
+        Status::where('id',$id)->update(['name'=>$request->name]);
+        return back()->with('success','Status Updated');
     }
 
     /**
@@ -78,8 +90,9 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Status $status)
+    public function destroy($id)
     {
-        //
+        Status::destroy($id);
+        return back()->with('success','Status Deleted Successfully');
     }
 }
