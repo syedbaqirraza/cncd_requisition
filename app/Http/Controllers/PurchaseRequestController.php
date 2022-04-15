@@ -18,14 +18,42 @@ class PurchaseRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $user_id=Auth::user()->id;
-        $requestData=DB::table('purchase_requests')
+        $userRole=Auth::user()->role_id;
+        if($userRole=="superadmin")
+        {
+            $requestData=DB::table('purchase_requests')
             ->where('purchase_requests.user_id',$user_id)
             ->join('statuses','purchase_requests.status_id','statuses.id')
             ->select('purchase_requests.*','statuses.name as status')
             ->get();
+
+        }
+        else if($userRole=="admin")
+        {
+            $requestData=DB::table('purchase_requests')
+            ->where('purchase_requests.user_id',$user_id)
+            ->join('statuses','purchase_requests.status_id','statuses.id')
+            ->select('purchase_requests.*','statuses.name as status')
+            ->get();
+
+
+        }
+        else if($userRole=="user")
+        {
+
+
+            $requestData=DB::table('purchase_requests')
+            ->where('purchase_requests.user_id',$user_id)
+            ->join('statuses','purchase_requests.status_id','statuses.id')
+            ->select('purchase_requests.*','statuses.name as status')
+            ->get();
+
+        }
+
         return view('pages.user.index',compact('requestData'));
     }
 
@@ -50,9 +78,11 @@ class PurchaseRequestController extends Controller
      */
     public function store(Request $request)
     {
+        // dd('ok');
         $userDeprt=Auth::user()->dept_id;
 
         $forword_from_id=Auth::user()->id;
+
 
         $roles=DB::table('roles')->where('name','admin')->first();
 
@@ -67,7 +97,6 @@ class PurchaseRequestController extends Controller
         ]);
 
         $request_id=PurchaseRequest::create($request->all())->id;
-
         RequestLog::create([
             'request_id'=>$request_id,
             'status'=>$request->status_id,
@@ -87,8 +116,18 @@ class PurchaseRequestController extends Controller
      */
     public function show($id)
     {
+
+       $this->roleName();
        // DB::table('purchase_requests')->join();
-        return view('pages.user.logs');
+       $data=DB::table('request_logs')
+            ->join('purchase_requests','purchase_requests.id','request_logs.request_id')
+            ->join('statuses','statuses.id','request_logs.status')
+            ->join('users as userTo','userTo.id','request_logs.forword_to_id')
+            ->join('users as userFrom','userFrom.id','request_logs.forword_from_id')
+            ->where('request_logs.request_id',$id)
+            ->select('request_logs.note as notes','request_logs.created_at as date_at','purchase_requests.description as item','purchase_requests.description as item','statuses.name as status','userTo.name as userToName','userFrom.name as userFromName')
+            ->get();
+        return view('pages.user.logs',compact('data'));
     }
 
     /**

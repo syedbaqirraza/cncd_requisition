@@ -19,48 +19,41 @@
       </div><!-- /.container-fluid -->
     </section>
 
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <h1 class="text-center">Request for: {{$data[0]->item}}</h1>
+            </div>
+        </div>
+    </section>
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
+        <div class="container-fluid">
+            @foreach ($data as $d)
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="timeline">
+                            <div class="time-label">
+                                <span class="bg-red">{{ \Carbon\Carbon::parse($d->date_at)->format('M-d-Y H:i A')}}</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-user bg-green"></i>
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header">Farword From To:- {{$d->userFromName}} <i class="fa fa-arrow-right"></i> {{$d->userToName}}</h3>
 
-        <!-- Timelime example  -->
-        <div class="row">
-          <div class="col-md-12">
-            <!-- The time line -->
-            <div class="timeline">
-              <!-- timeline time label -->
-              <div class="time-label">
-                <span class="bg-red">10 Feb. 2014</span>
-              </div>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <div>
-                <i class="fas fa-user bg-green"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fas fa-clock"></i> 12:05</span>
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-sm">Read more</a>
-                    <a class="btn btn-danger btn-sm">Delete</a>
-                  </div>
+                                    <div class="timeline-body">
+                                       Note:- {{$d->notes}}
+                                    </div>
+                                    <div class="timeline-footer">
+                                      Status:-  <a class="btn btn-primary btn-sm">{{$d->status}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-
-            </div>
-          </div>
-          <!-- /.col -->
+            @endforeach
         </div>
-      </div>
-      <!-- /.timeline -->
-
     </section>
     <!-- /.content -->
   </div>

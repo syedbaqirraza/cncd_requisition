@@ -12,7 +12,9 @@ class RequestLog extends Model
         'request_id',
         'status',
         'note',
-        'dept_id',
-        'forword_id',
+        'forword_to_id',
+        'forword_from_id',
     ];
+
+
 }

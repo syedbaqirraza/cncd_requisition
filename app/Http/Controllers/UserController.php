@@ -19,9 +19,11 @@ class UserController extends Controller
      */
     public function index()
     {
+
         $user=DB::table('users')
         ->join('roles','roles.id','users.role_id')
         ->join('departments','departments.id','users.dept_id')
+        ->where('users.id','!=',auth()->user()->id)
         ->select('users.*','roles.name as r_name','departments.name as d_name')
         ->get();
         return view('pages.admin.user.index',compact('user'));
