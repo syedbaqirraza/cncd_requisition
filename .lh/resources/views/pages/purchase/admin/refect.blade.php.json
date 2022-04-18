@@ -1,0 +1,18 @@
+{
+    "sourceFile": "resources/views/pages/purchase/admin/refect.blade.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1650299216308,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1650299216308,
+            "name": "Commit-0",
+            "content": "@extends('layouts.dashboard')\n@section('content')\n  <div class=\"content-wrapper\">\n    <section class=\"content-header\">\n      <div class=\"container-fluid\">\n        <div class=\"row mb-2\">\n          <div class=\"col-sm-6\">\n            <h1>Request Add</h1>\n          </div>\n          <div class=\"col-sm-6\">\n            <ol class=\"breadcrumb float-sm-right\">\n              <li class=\"breadcrumb-item\"><a href=\"{{route('home')}}\">Home</a></li>\n              <li class=\"breadcrumb-item active\">Request Add</li>\n            </ol>\n          </div>\n        </div>\n      </div>\n    </section>\n     <!-- Main content -->\n     <section class=\"content\">\n        <div class=\"container-fluid\">\n          <div class=\"row\">\n            <!-- left column -->\n            <div class=\"col-md-6 offset-md-3\">\n              <!-- general form elements -->\n              <div class=\"card card-primary\">\n                <div class=\"card-header\">\n                  <h3 class=\"card-title\">Add Request Form</h3>\n                </div>\n                @if($errors->any())\n                <div class=\"alert alert-danger\">\n\n                    <ul>\n                    @foreach ($errors->all() as $error)\n                        <li>{{ $error }}</li>\n                    @endforeach\n                    </ul>\n                </div>\n            @endif\n\n            @if (session()->has('success'))\n                <div class=\"alert alert-success\">{{ session()->get('success') }}</div>\n            @endif\n\n\n\n                <!-- /.card-header -->\n                <!-- form start -->\n                <form action=\"{{route('purchase.store')}}\" method=\"post\">\n                    @csrf\n                  <div class=\"card-body\">\n                    <div class=\"form-group\">\n                      <label for=\"exampleInputEmail1\">Write Your Request</label>\n                      <textarea name=\"description\" row='20' class=\"form-control\" placeholder=\"request description\"></textarea>\n                    </div>\n\n                  </div>\n                  <!-- /.card-body -->\n\n                  <div class=\"card-footer\">\n                    <button type=\"submit\" class=\"btn btn-primary btn-lg\">Submit</button>\n                  </div>\n                </form>\n              </div>\n              <!-- /.card -->\n            </div>\n          </div>\n          <!-- /.row -->\n        </div><!-- /.container-fluid -->\n      </section>\n      <!-- /.content -->\n  </div>\n  @endsection\n\n"
+        }
+    ]
+}

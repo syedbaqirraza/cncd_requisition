@@ -6,6 +6,7 @@ use App\Models\Phase;
 use App\Models\PurchaseRequest;
 use App\Models\RequestLog;
 use App\Models\Status;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,65 @@ class PurchaseRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function approved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.purchase.admin.approved',compact('request_log'));
+    }
+
+    public function reject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.purchase.admin.reject',compact('request_log'));
+    }
+
+    public function approvedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');
+    }
+
+    public function rejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');
+    }
 
     public function index()
     {
@@ -26,42 +86,31 @@ class PurchaseRequestController extends Controller
         if($userRole=="superadmin")
         {
             $requestData=DB::table('purchase_requests')
-            ->where('purchase_requests.user_id',$user_id)
-            ->join('statuses','purchase_requests.status_id','statuses.id')
-            ->select('purchase_requests.*','statuses.name as status')
-            ->get();
-
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+            return view('pages.purchase.superadmin.index',compact('requestData'));
         }
         else if($userRole=="admin")
         {
-            $requestData=DB::table('purchase_requests')
-            ->where('purchase_requests.user_id',$user_id)
-            ->join('statuses','purchase_requests.status_id','statuses.id')
-            ->select('purchase_requests.*','statuses.name as status')
-            ->get();
-
-
+            $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','request_logs.status','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+            return view('pages.purchase.admin.index',compact('requestData'));
         }
         else if($userRole=="user")
         {
-
-
             $requestData=DB::table('purchase_requests')
-            ->where('purchase_requests.user_id',$user_id)
-            ->join('statuses','purchase_requests.status_id','statuses.id')
-            ->select('purchase_requests.*','statuses.name as status')
-            ->get();
-
+                ->where('purchase_requests.user_id',$user_id)
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+            return view('pages.purchase.user.index',compact('requestData'));
         }
-
-        return view('pages.user.index',compact('requestData'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data=Status::where('name','open')->first();
@@ -117,8 +166,7 @@ class PurchaseRequestController extends Controller
     public function show($id)
     {
 
-       $this->roleName();
-       // DB::table('purchase_requests')->join();
+
        $data=DB::table('request_logs')
             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')
             ->join('statuses','statuses.id','request_logs.status')

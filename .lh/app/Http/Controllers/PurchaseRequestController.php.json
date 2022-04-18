@@ -1,0 +1,290 @@
+{
+    "sourceFile": "app/Http/Controllers/PurchaseRequestController.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 68,
+            "patches": [
+                {
+                    "date": 1650283062256,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1650283115832,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -116,10 +116,8 @@\n      */\n     public function show($id)\n     {\n \n-       auth()->\n-       // DB::table('purchase_requests')->join();\n        $data=DB::table('request_logs')\n             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n             ->join('statuses','statuses.id','request_logs.status')\n             ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n"
+                },
+                {
+                    "date": 1650283143873,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -124,8 +124,9 @@\n             ->join('users as userFrom','userFrom.id','request_logs.forword_from_id')\n             ->where('request_logs.request_id',$id)\n             ->select('request_logs.note as notes','request_logs.created_at as date_at','purchase_requests.description as item','purchase_requests.description as item','statuses.name as status','userTo.name as userToName','userFrom.name as userFromName')\n             ->get();\n+            dd($data);\n         return view('pages.user.logs',compact('data'));\n     }\n \n     /**\n"
+                },
+                {
+                    "date": 1650285430697,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -124,9 +124,8 @@\n             ->join('users as userFrom','userFrom.id','request_logs.forword_from_id')\n             ->where('request_logs.request_id',$id)\n             ->select('request_logs.note as notes','request_logs.created_at as date_at','purchase_requests.description as item','purchase_requests.description as item','statuses.name as status','userTo.name as userToName','userFrom.name as userFromName')\n             ->get();\n-            dd($data);\n         return view('pages.user.logs',compact('data'));\n     }\n \n     /**\n"
+                },
+                {
+                    "date": 1650285596242,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -116,8 +116,9 @@\n      */\n     public function show($id)\n     {\n \n+\n        $data=DB::table('request_logs')\n             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n             ->join('statuses','statuses.id','request_logs.status')\n             ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n"
+                },
+                {
+                    "date": 1650285659657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -115,10 +115,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function show($id)\n     {\n-\n-\n+       dd(auth()->user->role_id());\n        $data=DB::table('request_logs')\n             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n             ->join('statuses','statuses.id','request_logs.status')\n             ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n"
+                },
+                {
+                    "date": 1650285699897,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -115,9 +115,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function show($id)\n     {\n-       dd(auth()->user->role_id());\n+       dd(auth()->user()->role_id);\n        $data=DB::table('request_logs')\n             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n             ->join('statuses','statuses.id','request_logs.status')\n             ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n"
+                },
+                {
+                    "date": 1650285797459,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -115,9 +115,10 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function show($id)\n     {\n-       dd(auth()->user()->role_id);\n+\n+\n        $data=DB::table('request_logs')\n             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n             ->join('statuses','statuses.id','request_logs.status')\n             ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n"
+                },
+                {
+                    "date": 1650285849817,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,13 +25,11 @@\n         $userRole=Auth::user()->role_id;\n         if($userRole==\"superadmin\")\n         {\n             $requestData=DB::table('purchase_requests')\n-            ->where('purchase_requests.user_id',$user_id)\n             ->join('statuses','purchase_requests.status_id','statuses.id')\n             ->select('purchase_requests.*','statuses.name as status')\n             ->get();\n-\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('purchase_requests')\n"
+                },
+                {
+                    "date": 1650286716299,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,10 +36,8 @@\n             ->where('purchase_requests.user_id',$user_id)\n             ->join('statuses','purchase_requests.status_id','statuses.id')\n             ->select('purchase_requests.*','statuses.name as status')\n             ->get();\n-\n-\n         }\n         else if($userRole==\"user\")\n         {\n \n"
+                },
+                {
+                    "date": 1650286842604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('purchase_requests')\n-            ->where('purchase_requests.user_id',$user_id)\n+            ->where('purchase_requests.forword_to_id',$user_id)\n             ->join('statuses','purchase_requests.status_id','statuses.id')\n             ->select('purchase_requests.*','statuses.name as status')\n             ->get();\n         }\n"
+                },
+                {
+                    "date": 1650286910719,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,11 +31,11 @@\n             ->get();\n         }\n         else if($userRole==\"admin\")\n         {\n-            $requestData=DB::table('purchase_requests')\n-            ->where('purchase_requests.forword_to_id',$user_id)\n+            $requestData=DB::table('request_logs')\n             ->join('statuses','purchase_requests.status_id','statuses.id')\n+            ->where('request_logs.forword_to_id',$user_id)\n             ->select('purchase_requests.*','statuses.name as status')\n             ->get();\n         }\n         else if($userRole==\"user\")\n"
+                },
+                {
+                    "date": 1650286924700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,12 +32,12 @@\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('request_logs')\n-            ->join('statuses','purchase_requests.status_id','statuses.id')\n-            ->where('request_logs.forword_to_id',$user_id)\n-            ->select('purchase_requests.*','statuses.name as status')\n-            ->get();\n+                ->join('statuses','request_logs.status_id','statuses.id')\n+                ->where('request_logs.forword_to_id',$user_id)\n+                ->select('purchase_requests.*','statuses.name as status')\n+                ->get();\n         }\n         else if($userRole==\"user\")\n         {\n \n"
+                },
+                {
+                    "date": 1650286934043,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('request_logs')\n-                ->join('statuses','request_logs.status_id','statuses.id')\n+                ->join('statuses','request_logs.status','statuses.id')\n                 ->where('request_logs.forword_to_id',$user_id)\n                 ->select('purchase_requests.*','statuses.name as status')\n                 ->get();\n         }\n"
+                },
+                {
+                    "date": 1650286954528,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,8 +32,9 @@\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('request_logs')\n+                ->join('request_id','request_logs.status','statuses.id')\n                 ->join('statuses','request_logs.status','statuses.id')\n                 ->where('request_logs.forword_to_id',$user_id)\n                 ->select('purchase_requests.*','statuses.name as status')\n                 ->get();\n"
+                },
+                {
+                    "date": 1650286989694,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('request_logs')\n-                ->join('request_id','request_logs.status','statuses.id')\n+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')\n                 ->join('statuses','request_logs.status','statuses.id')\n                 ->where('request_logs.forword_to_id',$user_id)\n                 ->select('purchase_requests.*','statuses.name as status')\n                 ->get();\n"
+                },
+                {
+                    "date": 1650298675532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,11 +25,12 @@\n         $userRole=Auth::user()->role_id;\n         if($userRole==\"superadmin\")\n         {\n             $requestData=DB::table('purchase_requests')\n-            ->join('statuses','purchase_requests.status_id','statuses.id')\n-            ->select('purchase_requests.*','statuses.name as status')\n-            ->get();\n+                ->join('statuses','purchase_requests.status_id','statuses.id')\n+                ->select('purchase_requests.*','statuses.name as status')\n+                ->get();\n+            return view('pages.purchase.superadmin.index',compact('requestData'));\n         }\n         else if($userRole==\"admin\")\n         {\n             $requestData=DB::table('request_logs')\n@@ -37,29 +38,20 @@\n                 ->join('statuses','request_logs.status','statuses.id')\n                 ->where('request_logs.forword_to_id',$user_id)\n                 ->select('purchase_requests.*','statuses.name as status')\n                 ->get();\n+            return view('pages.purchase.admin.index',compact('requestData'));\n         }\n         else if($userRole==\"user\")\n         {\n-\n-\n             $requestData=DB::table('purchase_requests')\n-            ->where('purchase_requests.user_id',$user_id)\n-            ->join('statuses','purchase_requests.status_id','statuses.id')\n-            ->select('purchase_requests.*','statuses.name as status')\n-            ->get();\n-\n+                ->where('purchase_requests.user_id',$user_id)\n+                ->join('statuses','purchase_requests.status_id','statuses.id')\n+                ->select('purchase_requests.*','statuses.name as status')\n+                ->get();\n+            return view('pages.purchase.user.index',compact('requestData'));\n         }\n-\n-        return view('pages.user.index',compact('requestData'));\n     }\n-\n-    /**\n-     * Show the form for creating a new resource.\n-     *\n-     * @return \\Illuminate\\Http\\Response\n-     */\n     public function create()\n     {\n         $data=Status::where('name','open')->first();\n         $status_id=$data->id;\n"
+                },
+                {
+                    "date": 1650299065932,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,12 @@\n      * Display a listing of the resource.\n      *\n      * @return \\Illuminate\\Http\\Response\n      */\n+    public function approved()\n+    {\n \n+    }\n     public function index()\n     {\n         $user_id=Auth::user()->id;\n         $userRole=Auth::user()->role_id;\n"
+                },
+                {
+                    "date": 1650299560277,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,10 +17,15 @@\n      * Display a listing of the resource.\n      *\n      * @return \\Illuminate\\Http\\Response\n      */\n-    public function approved()\n+    public function approved($id)\n     {\n+        \n+        return view('');\n+    }\n+    public function reject($id)\n+    {\n \n     }\n     public function index()\n     {\n"
+                },
+                {
+                    "date": 1650299948441,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,15 +19,23 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        \n+\n         return view('');\n     }\n     public function reject($id)\n     {\n \n     }\n+    public function approvedStore(Request $request)\n+    {\n+\n+    }\n+    public function rejectStore(Request $request)\n+    {\n+\n+    }\n     public function index()\n     {\n         $user_id=Auth::user()->id;\n         $userRole=Auth::user()->role_id;\n"
+                },
+                {
+                    "date": 1650299961546,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,23 +19,26 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-\n         return view('');\n     }\n+\n     public function reject($id)\n     {\n \n     }\n+\n     public function approvedStore(Request $request)\n     {\n \n     }\n+\n     public function rejectStore(Request $request)\n     {\n \n     }\n+\n     public function index()\n     {\n         $user_id=Auth::user()->id;\n         $userRole=Auth::user()->role_id;\n"
+                },
+                {
+                    "date": 1650299982904,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,8 +19,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n+        \n         return view('');\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300075672,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,15 +19,15 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        \n-        return view('');\n+\n+        return view('pages.purchase.admin.approved');\n     }\n \n     public function reject($id)\n     {\n-\n+        return view('pages.purchase.admin.reject');\n     }\n \n     public function approvedStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650300600465,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-\n+        \n         return view('pages.purchase.admin.approved');\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300692290,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        \n+        DB::table('request_logs')->where('id',$id)->first();\n         return view('pages.purchase.admin.approved');\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300701725,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        DB::table('request_logs')->where('id',$id)->first();\n+        $requet_log=DB::table('request_logs')->where('id',$id)->first();\n         return view('pages.purchase.admin.approved');\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300748598,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,10 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        $requet_log=DB::table('request_logs')->where('id',$id)->first();\n-        return view('pages.purchase.admin.approved');\n+        $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n+        return view('pages.purchase.admin.approved',compact('$request_log'));\n     }\n \n     public function reject($id)\n     {\n"
+                },
+                {
+                    "date": 1650300756439,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n      */\n     public function approved($id)\n     {\n         $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n-        return view('pages.purchase.admin.approved',compact('$request_log'));\n+        return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n     {\n"
+                },
+                {
+                    "date": 1650300772704,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,9 @@\n      */\n     public function approved($id)\n     {\n         $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n+        dd($requet_log);\n         return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300802982,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n      */\n     public function approved($id)\n     {\n         $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n-        dd($requet_log);\n+\n         return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300821427,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,8 @@\n      */\n     public function approved($id)\n     {\n         $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n-\n         return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300863518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n-\n+        dd($request->all());\n     }\n \n     public function rejectStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650300889656,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n      * @return \\Illuminate\\Http\\Response\n      */\n     public function approved($id)\n     {\n-        $requet_log=DB::table('request_logs')->where('request_id',$id)->first();\n+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();\n         return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n"
+                },
+                {
+                    "date": 1650300999532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,14 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n-        dd($request->all());\n+        $this->validate($request,[\n+            'notes'=>'required',\n+        ]);\n+        RequestLog::create([\n+            \n+        ]);\n     }\n \n     public function rejectStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650301014846,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,13 +30,14 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n+        \n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n-            \n+\n         ]);\n     }\n \n     public function rejectStore(Request $request)\n"
+                },
+                {
+                    "date": 1650301123904,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,14 +30,14 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n-        \n+        Status::where('')->first();\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n-\n+            ''\n         ]);\n     }\n \n     public function rejectStore(Request $request)\n"
+                },
+                {
+                    "date": 1650301155487,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,10 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n-        Status::where('')->first();\n+        $status_id=Status::where('name',\"approved by HOD\")->first();\n+        dd($status_id);\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n"
+                },
+                {
+                    "date": 1650301179508,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        dd($status_id);\n+\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n"
+                },
+                {
+                    "date": 1650301196878,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -34,8 +34,10 @@\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n         $this->validate($request,[\n             'notes'=>'required',\n+            'status'=>$status_id->id,\n+\n         ]);\n         RequestLog::create([\n             ''\n         ]);\n"
+                },
+                {
+                    "date": 1650301258739,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n      */\n     public function approved($id)\n     {\n         $request_log=DB::table('request_logs')->where('request_id',$id)->first();\n-        return view('pages.purchase.admin.approved',compact('request_log'));\n+        return view('pages.purchase.admin.approved',compact('request_log','id'));\n     }\n \n     public function reject($id)\n     {\n"
+                },
+                {
+                    "date": 1650301264185,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n      */\n     public function approved($id)\n     {\n         $request_log=DB::table('request_logs')->where('request_id',$id)->first();\n-        return view('pages.purchase.admin.approved',compact('request_log','id'));\n+        return view('pages.purchase.admin.approved',compact('request_log'));\n     }\n \n     public function reject($id)\n     {\n"
+                },
+                {
+                    "date": 1650301327896,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -35,8 +35,9 @@\n \n         $this->validate($request,[\n             'notes'=>'required',\n             'status'=>$status_id->id,\n+            'status'=>$status_id->request_id,\n \n         ]);\n         RequestLog::create([\n             ''\n"
+                },
+                {
+                    "date": 1650301346059,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -34,15 +34,16 @@\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n         $this->validate($request,[\n             'notes'=>'required',\n+\n+        ]);\n+        RequestLog::create([\n+            'notes'=>$status_id->id,\n             'status'=>$status_id->id,\n             'status'=>$status_id->request_id,\n \n         ]);\n-        RequestLog::create([\n-            ''\n-        ]);\n     }\n \n     public function rejectStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650301352827,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n \n         ]);\n         RequestLog::create([\n             'notes'=>$status_id->id,\n-            'status'=>$status_id->id,\n+            'request_id'=>$status_id->id,\n             'status'=>$status_id->request_id,\n \n         ]);\n     }\n"
+                },
+                {
+                    "date": 1650301394418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,11 +37,11 @@\n             'notes'=>'required',\n \n         ]);\n         RequestLog::create([\n-            'notes'=>$status_id->id,\n-            'request_id'=>$status_id->id,\n-            'status'=>$status_id->request_id,\n+            'notes'=>$status_id->notes,\n+            'request_id'=>$status_id->request_id,\n+            'status'=>$status_id->id,\n \n         ]);\n     }\n \n"
+                },
+                {
+                    "date": 1650301414449,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,10 +37,10 @@\n             'notes'=>'required',\n \n         ]);\n         RequestLog::create([\n-            'notes'=>$status_id->notes,\n-            'request_id'=>$status_id->request_id,\n+            'notes'=>$request->notes,\n+            'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n \n         ]);\n     }\n"
+                },
+                {
+                    "date": 1650301459419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-\n+        User::where('')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301506243,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        User::where('')\n+        DB::table('users')->join('departments','users.id',)\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301515940,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.id',)\n+        DB::table('users')->join('departments','users.id','departments')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301522677,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.id','departments')\n+        DB::table('users')->join('departments','users.id','departments.id')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301533251,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.id','departments.id')\n+        DB::table('users')->join('departments','users.dept_id','departments.id')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301547835,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.dept_id','departments.id')\n+        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments',)\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301601422,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments',)\n+        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301625204,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('')\n+        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('users.id as farword_to_id')\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301636979,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('users.id as farword_to_id')\n+        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('users.id as farword_to_id')->first();\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301656933,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,15 @@\n \n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n-        DB::table('users')->join('departments','users.dept_id','departments.id')->where('departments','administration')->select('users.id as farword_to_id')->first();\n+\n+        DB::table('users')\n+            ->join('departments','users.dept_id','departments.id')\n+            ->where('departments','administration')\n+            ->select('users.id as farword_to_id')\n+            ->first();\n+\n         $this->validate($request,[\n             'notes'=>'required',\n \n         ]);\n"
+                },
+                {
+                    "date": 1650301665465,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n-        DB::table('users')\n+        $farword_to_id=DB::table('users')\n             ->join('departments','users.dept_id','departments.id')\n             ->where('departments','administration')\n             ->select('users.id as farword_to_id')\n             ->first();\n"
+                },
+                {
+                    "date": 1650301673325,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n     public function approvedStore(Request $request)\n     {\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n-        $farword_to_id=DB::table('users')\n+        $user=DB::table('users')\n             ->join('departments','users.dept_id','departments.id')\n             ->where('departments','administration')\n             ->select('users.id as farword_to_id')\n             ->first();\n"
+                },
+                {
+                    "date": 1650301690888,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,8 +46,9 @@\n         RequestLog::create([\n             'notes'=>$request->notes,\n             'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n+            'status'=>$user->farword_to_id,\n \n         ]);\n     }\n \n"
+                },
+                {
+                    "date": 1650301707194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,10 @@\n         RequestLog::create([\n             'notes'=>$request->notes,\n             'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n-            'status'=>$user->farword_to_id,\n+            'forword_to_id'=>$user->farword_to_id,\n+            'forword_from_id'=>$user->farword_to_id,\n \n         ]);\n     }\n \n"
+                },
+                {
+                    "date": 1650301738288,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,8 +30,9 @@\n     }\n \n     public function approvedStore(Request $request)\n     {\n+        $user_id=auth()->user()->id;\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n         $user=DB::table('users')\n             ->join('departments','users.dept_id','departments.id')\n@@ -40,16 +41,15 @@\n             ->first();\n \n         $this->validate($request,[\n             'notes'=>'required',\n-\n         ]);\n         RequestLog::create([\n             'notes'=>$request->notes,\n             'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n             'forword_to_id'=>$user->farword_to_id,\n-            'forword_from_id'=>$user->farword_to_id,\n+            'forword_from_id'=>$user_id,\n \n         ]);\n     }\n \n"
+                },
+                {
+                    "date": 1650301766857,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n use App\\Models\\Phase;\n use App\\Models\\PurchaseRequest;\n use App\\Models\\RequestLog;\n use App\\Models\\Status;\n+use Carbon\\Carbon;\n use Illuminate\\Http\\Request;\n use Illuminate\\Support\\Facades\\Auth;\n use Illuminate\\Support\\Facades\\DB;\n use Phar;\n@@ -48,9 +49,9 @@\n             'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n             'forword_to_id'=>$user->farword_to_id,\n             'forword_from_id'=>$user_id,\n-\n+            'created_at'=>Carbon::now(),\n         ]);\n     }\n \n     public function rejectStore(Request $request)\n"
+                },
+                {
+                    "date": 1650301863167,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -51,8 +51,9 @@\n             'forword_to_id'=>$user->farword_to_id,\n             'forword_from_id'=>$user_id,\n             'created_at'=>Carbon::now(),\n         ]);\n+        return redirect()->route()->with('success','Request Farworded Succesfully');\n     }\n \n     public function rejectStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650301881044,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -51,9 +51,9 @@\n             'forword_to_id'=>$user->farword_to_id,\n             'forword_from_id'=>$user_id,\n             'created_at'=>Carbon::now(),\n         ]);\n-        return redirect()->route()->with('success','Request Farworded Succesfully');\n+        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');\n     }\n \n     public function rejectStore(Request $request)\n     {\n"
+                },
+                {
+                    "date": 1650301917032,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n         $status_id=Status::where('name',\"approved by HOD\")->first();\n \n         $user=DB::table('users')\n             ->join('departments','users.dept_id','departments.id')\n-            ->where('departments','administration')\n+            ->where('departments.name','administration')\n             ->select('users.id as farword_to_id')\n             ->first();\n \n         $this->validate($request,[\n"
+                },
+                {
+                    "date": 1650301966474,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n             ->join('departments','users.dept_id','departments.id')\n             ->where('departments.name','administration')\n             ->select('users.id as farword_to_id')\n             ->first();\n-\n+        dd($user);\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n"
+                },
+                {
+                    "date": 1650302083825,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,8 @@\n             ->join('departments','users.dept_id','departments.id')\n             ->where('departments.name','administration')\n             ->select('users.id as farword_to_id')\n             ->first();\n-        dd($user);\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n"
+                },
+                {
+                    "date": 1650302096483,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n         $this->validate($request,[\n             'notes'=>'required',\n         ]);\n         RequestLog::create([\n-            'notes'=>$request->notes,\n+            'note'=>$request->notes,\n             'request_id'=>$request->request_id,\n             'status'=>$status_id->id,\n             'forword_to_id'=>$user->farword_to_id,\n             'forword_from_id'=>$user_id,\n"
+                },
+                {
+                    "date": 1650302285994,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,10 @@\n     }\n \n     public function reject($id)\n     {\n-        return view('pages.purchase.admin.reject');\n+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();\n+        return view('pages.purchase.admin.reject',compact('request_log'));\n     }\n \n     public function approvedStore(Request $request)\n     {\n@@ -55,9 +56,28 @@\n     }\n \n     public function rejectStore(Request $request)\n     {\n+        $user_id=auth()->user()->id;\n+        $status_id=Status::where('name',\"approved by HOD\")->first();\n \n+        $user=DB::table('users')\n+            ->join('departments','users.dept_id','departments.id')\n+            ->where('departments.name','administration')\n+            ->select('users.id as farword_to_id')\n+            ->first();\n+        $this->validate($request,[\n+            'notes'=>'required',\n+        ]);\n+        RequestLog::create([\n+            'note'=>$request->notes,\n+            'request_id'=>$request->request_id,\n+            'status'=>$status_id->id,\n+            'forword_to_id'=>$user->farword_to_id,\n+            'forword_from_id'=>$user_id,\n+            'created_at'=>Carbon::now(),\n+        ]);\n+        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');\n     }\n \n     public function index()\n     {\n"
+                }
+            ],
+            "date": 1650283062256,
+            "name": "Commit-0",
+            "content": "<?php\n\nnamespace App\\Http\\Controllers;\n\nuse App\\Models\\Phase;\nuse App\\Models\\PurchaseRequest;\nuse App\\Models\\RequestLog;\nuse App\\Models\\Status;\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Auth;\nuse Illuminate\\Support\\Facades\\DB;\nuse Phar;\n\nclass PurchaseRequestController extends Controller\n{\n    /**\n     * Display a listing of the resource.\n     *\n     * @return \\Illuminate\\Http\\Response\n     */\n\n    public function index()\n    {\n        $user_id=Auth::user()->id;\n        $userRole=Auth::user()->role_id;\n        if($userRole==\"superadmin\")\n        {\n            $requestData=DB::table('purchase_requests')\n            ->where('purchase_requests.user_id',$user_id)\n            ->join('statuses','purchase_requests.status_id','statuses.id')\n            ->select('purchase_requests.*','statuses.name as status')\n            ->get();\n\n        }\n        else if($userRole==\"admin\")\n        {\n            $requestData=DB::table('purchase_requests')\n            ->where('purchase_requests.user_id',$user_id)\n            ->join('statuses','purchase_requests.status_id','statuses.id')\n            ->select('purchase_requests.*','statuses.name as status')\n            ->get();\n\n\n        }\n        else if($userRole==\"user\")\n        {\n\n\n            $requestData=DB::table('purchase_requests')\n            ->where('purchase_requests.user_id',$user_id)\n            ->join('statuses','purchase_requests.status_id','statuses.id')\n            ->select('purchase_requests.*','statuses.name as status')\n            ->get();\n\n        }\n\n        return view('pages.user.index',compact('requestData'));\n    }\n\n    /**\n     * Show the form for creating a new resource.\n     *\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function create()\n    {\n        $data=Status::where('name','open')->first();\n        $status_id=$data->id;\n        $user_id=Auth::user()->id;\n        return view('pages.user.add',compact('status_id','user_id'));\n    }\n\n    /**\n     * Store a newly created resource in storage.\n     *\n     * @param  \\Illuminate\\Http\\Request  $request\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function store(Request $request)\n    {\n        // dd('ok');\n        $userDeprt=Auth::user()->dept_id;\n\n        $forword_from_id=Auth::user()->id;\n\n\n        $roles=DB::table('roles')->where('name','admin')->first();\n\n        $forword_to_id=DB::table('users')->where('role_id',$roles->id)->first();\n\n\n\n        $this->validate($request,[\n            'description'=>'required',\n            'status_id'=>'required',\n            'user_id'=>'required',\n        ]);\n\n        $request_id=PurchaseRequest::create($request->all())->id;\n        RequestLog::create([\n            'request_id'=>$request_id,\n            'status'=>$request->status_id,\n            'forword_to_id'=>$forword_to_id->id,\n            'forword_from_id'=>$forword_from_id,\n            'note'=>'Generate Request'\n        ]);\n\n        return back()->with('success','Request Added Successfullly');\n    }\n\n    /**\n     * Display the specified resource.\n     *\n     * @param  \\App\\Models\\PurchaseRequest  $purchaseRequest\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function show($id)\n    {\n\n       auth()->\n       // DB::table('purchase_requests')->join();\n       $data=DB::table('request_logs')\n            ->join('purchase_requests','purchase_requests.id','request_logs.request_id')\n            ->join('statuses','statuses.id','request_logs.status')\n            ->join('users as userTo','userTo.id','request_logs.forword_to_id')\n            ->join('users as userFrom','userFrom.id','request_logs.forword_from_id')\n            ->where('request_logs.request_id',$id)\n            ->select('request_logs.note as notes','request_logs.created_at as date_at','purchase_requests.description as item','purchase_requests.description as item','statuses.name as status','userTo.name as userToName','userFrom.name as userFromName')\n            ->get();\n        return view('pages.user.logs',compact('data'));\n    }\n\n    /**\n     * Show the form for editing the specified resource.\n     *\n     * @param  \\App\\Models\\PurchaseRequest  $purchaseRequest\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function edit($id)\n    {\n        $request=PurchaseRequest::find($id);\n        return view('pages.user.edit',compact('request'));\n    }\n\n    /**\n     * Update the specified resource in storage.\n     *\n     * @param  \\Illuminate\\Http\\Request  $request\n     * @param  \\App\\Models\\PurchaseRequest  $purchaseRequest\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function update(Request $request,$id)\n    {\n        PurchaseRequest::where('id',$id)->update(['description'=>$request->description]);\n        return back()->with('success','Update Request Successfully');\n    }\n\n    /**\n     * Remove the specified resource from storage.\n     *\n     * @param  \\App\\Models\\PurchaseRequest  $purchaseRequest\n     * @return \\Illuminate\\Http\\Response\n     */\n    public function destroy($id)\n    {\n        PurchaseRequest::where('id',$id)->delete();\n        RequestLog::where('request_id',$id)->delete();\n        return back()->with('success','Request Deleted Successfullly');\n    }\n}\n"
+        }
+    ]
+}

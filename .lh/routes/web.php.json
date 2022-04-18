@@ -1,0 +1,22 @@
+{
+    "sourceFile": "routes/web.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1650299035874,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1650299982802,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -35,8 +35,10 @@\n Route::resource('purchase',PurchaseRequestController::class);\n Route::get('purchase/destroy/{id}',[PurchaseRequestController::class,'destroy'])->name('purchase.destroy');\n Route::get('purchase/approved/{id}',[PurchaseRequestController::class,'approved'])->name('purchase.approved');\n Route::get('purchase/reject/{id}',[PurchaseRequestController::class,'reject'])->name('purchase.reject');\n+Route::post('purchase/approved/store',[PurchaseRequestController::class,'approvedStore'])->name('purchase.approved.store');\n+Route::post('purchase/reject/store',[PurchaseRequestController::class,'rejectStore'])->name('purchase.reject.store');\n Route::get('log',function(){\n     Auth::logout();\n \n         return redirect('login');\n"
+                }
+            ],
+            "date": 1650299035874,
+            "name": "Commit-0",
+            "content": "<?php\n\nuse App\\Http\\Controllers\\DepartmentController;\nuse App\\Http\\Controllers\\HomeController;\nuse App\\Http\\Controllers\\MenuController;\nuse App\\Http\\Controllers\\PhaseController;\nuse App\\Http\\Controllers\\PurchaseRequestController;\nuse App\\Http\\Controllers\\RoleController;\nuse App\\Http\\Controllers\\StatusController;\nuse App\\Http\\Controllers\\UserController;\nuse App\\Models\\PurchaseRequest;\nuse Illuminate\\Support\\Facades\\Auth;\nuse Illuminate\\Support\\Facades\\Route;\n\n/*\n|--------------------------------------------------------------------------\n| Web Routes\n|--------------------------------------------------------------------------\n|\n| Here is where you can register web routes for your application. These\n| routes are loaded by the RouteServiceProvider within a group which\n| contains the \"web\" middleware group. Now create something great!\n|\n*/\nAuth::routes();\nRoute::get('/', function () {return redirect()->route('login');});\nRoute::get('/home', [HomeController::class, 'index'])->name('home');\nRoute::resource('roles',RoleController::class);\nRoute::resource('department',DepartmentController::class);\nRoute::resource('phase',PhaseController::class);\nRoute::resource('status',StatusController::class);\nRoute::resource('user',UserController::class);\nRoute::resource('role_type',StatusController::class);\nRoute::put('user/status/{id}',[UserController::class,'statusUpdate'])->name('user.status.update');\nRoute::resource('purchase',PurchaseRequestController::class);\nRoute::get('purchase/destroy/{id}',[PurchaseRequestController::class,'destroy'])->name('purchase.destroy');\nRoute::get('purchase/approved/{id}',[PurchaseRequestController::class,'approved'])->name('purchase.approved');\nRoute::get('purchase/reject/{id}',[PurchaseRequestController::class,'reject'])->name('purchase.reject');\nRoute::get('log',function(){\n    Auth::logout();\n\n        return redirect('login');\n})->name('log');\n\n"
+        }
+    ]
+}

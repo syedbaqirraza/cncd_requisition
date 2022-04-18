@@ -34,6 +34,10 @@ Route::resource('role_type',StatusController::class);
 Route::put('user/status/{id}',[UserController::class,'statusUpdate'])->name('user.status.update');
 Route::resource('purchase',PurchaseRequestController::class);
 Route::get('purchase/destroy/{id}',[PurchaseRequestController::class,'destroy'])->name('purchase.destroy');
+Route::get('purchase/approved/{id}',[PurchaseRequestController::class,'approved'])->name('purchase.approved');
+Route::get('purchase/reject/{id}',[PurchaseRequestController::class,'reject'])->name('purchase.reject');
+Route::post('purchase/approved/store',[PurchaseRequestController::class,'approvedStore'])->name('purchase.approved.store');
+Route::post('purchase/reject/store',[PurchaseRequestController::class,'rejectStore'])->name('purchase.reject.store');
 Route::get('log',function(){
     Auth::logout();
 

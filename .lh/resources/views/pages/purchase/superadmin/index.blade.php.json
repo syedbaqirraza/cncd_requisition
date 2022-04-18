@@ -1,0 +1,22 @@
+{
+    "sourceFile": "resources/views/pages/purchase/superadmin/index.blade.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1650298675419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1650298701849,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -48,9 +48,8 @@\n                         <td>{{$r->created_at}}</td>\n                         <td>\n \n                             <a role=\"button\" class=\"btn btn-info float-left mr-1\" href=\"{{route('purchase.show',['purchase'=>$r->id])}}\">Check Logs</a>\n-                            <a role=\"button\" class=\"btn btn-success float-left mr-1\" href=\"{{route('purchase.edit',['purchase'=>$r->id])}}\">Edit</a>\n                             <a role=\"button\" class=\"btn btn-danger float-left\" href=\"{{route('purchase.destroy',['id'=>$r->id])}}\">Delete</a>\n \n                         </td>\n \n"
+                }
+            ],
+            "date": 1650298675419,
+            "name": "Commit-0",
+            "content": "@extends('layouts.dashboard')\n@section('content')\n  <div class=\"content-wrapper\">\n    <section class=\"content-header\">\n      <div class=\"container-fluid\">\n        <div class=\"row mb-2\">\n          <div class=\"col-sm-6\">\n            <h1>All Requests</h1>\n          </div>\n          <div class=\"col-sm-6\">\n            <ol class=\"breadcrumb float-sm-right\">\n              <li class=\"breadcrumb-item\"><a href=\"{{route('home')}}\">Home</a></li>\n              <li class=\"breadcrumb-item active\">All Requests</li>\n            </ol>\n          </div>\n        </div>\n      </div>\n    </section>\n    <section class=\"content\">\n        <div class=\"card\">\n            <div class=\"card-header\">\n            @if (session()->has('success'))\n                <div class=\"alert alert-success\">{{ session()->get('success') }}</div>\n            @endif\n            </div>\n            <!-- /.card-header -->\n            <div class=\"card-body\">\n              <table id=\"example1\" class=\"table table-bordered table-striped\">\n                <thead>\n                <tr>\n                    <th>#</th>\n                    <th>Request</th>\n                    <th>Status</th>\n                    <th>Create at</th>\n                    <th>Action</th>\n                </tr>\n                </thead>\n                <tbody>\n                    @php\n                        $count=1;\n                    @endphp\n                    @foreach ($requestData as $r)\n\n                    <tr>\n                        <td>{{$count}}</td>\n                        <td>{{$r->description}}</td>\n                        <td>{{$r->status}}</td>\n                        <td>{{$r->created_at}}</td>\n                        <td>\n\n                            <a role=\"button\" class=\"btn btn-info float-left mr-1\" href=\"{{route('purchase.show',['purchase'=>$r->id])}}\">Check Logs</a>\n                            <a role=\"button\" class=\"btn btn-success float-left mr-1\" href=\"{{route('purchase.edit',['purchase'=>$r->id])}}\">Edit</a>\n                            <a role=\"button\" class=\"btn btn-danger float-left\" href=\"{{route('purchase.destroy',['id'=>$r->id])}}\">Delete</a>\n\n                        </td>\n\n                    </tr>\n\n                    @php\n                        $count++;\n                    @endphp\n                    @endforeach\n                </tbody>\n                <tfoot>\n\n                        <tr>\n                            <th>#</th>\n                            <th>Request</th>\n                            <th>Status</th>\n                            <th>Create at</th>\n                            <th>Action</th>\n                        </tr>\n\n                </tfoot>\n              </table>\n            </div>\n            <!-- /.card-body -->\n          </div>\n          <!-- /.card -->\n        </div>\n    </section>\n  </div>\n  @endsection\n\n"
+        }
+    ]
+}
