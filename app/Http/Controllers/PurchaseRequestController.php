@@ -22,20 +22,18 @@ class PurchaseRequestController extends Controller
     public function approved($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.purchase.admin.approved',compact('request_log'));
+        return view('pages.requests.admin.approved',compact('request_log'));
     }
 
     public function reject($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.purchase.admin.reject',compact('request_log'));
+        return view('pages.requests.admin.reject',compact('request_log'));
     }
-
     public function approvedStore(Request $request)
     {
         $user_id=auth()->user()->id;
         $status_id=Status::where('name',"approved by HOD")->first();
-
         $user=DB::table('users')
             ->join('departments','users.dept_id','departments.id')
             ->where('departments.name','administration')
@@ -52,12 +50,13 @@ class PurchaseRequestController extends Controller
             'forword_from_id'=>$user_id,
             'created_at'=>Carbon::now(),
         ]);
-        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
     }
 
     public function rejectStore(Request $request)
     {
         $user_id=auth()->user()->id;
+
         $status_id=Status::where('name',"approved by HOD")->first();
 
         $user=DB::table('users')
@@ -76,21 +75,24 @@ class PurchaseRequestController extends Controller
             'forword_from_id'=>$user_id,
             'created_at'=>Carbon::now(),
         ]);
-        return redirect()->route('purchase.index')->with('success','Request Farworded Succesfully');
+
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
     }
 
     public function index()
     {
         $user_id=Auth::user()->id;
         $userRole=Auth::user()->role_id;
+
         if($userRole=="superadmin")
         {
             $requestData=DB::table('purchase_requests')
                 ->join('statuses','purchase_requests.status_id','statuses.id')
                 ->select('purchase_requests.*','statuses.name as status')
                 ->get();
-            return view('pages.purchase.superadmin.index',compact('requestData'));
+            return view('pages.requests.superadmin.index',compact('requestData'));
         }
+
         else if($userRole=="admin")
         {
             $requestData=DB::table('request_logs')
@@ -99,8 +101,9 @@ class PurchaseRequestController extends Controller
                 ->where('request_logs.forword_to_id',$user_id)
                 ->select('purchase_requests.*','statuses.name as status')
                 ->get();
-            return view('pages.purchase.admin.index',compact('requestData'));
+            return view('pages.requests.admin.index',compact('requestData'));
         }
+
         else if($userRole=="user")
         {
             $requestData=DB::table('purchase_requests')
@@ -108,8 +111,9 @@ class PurchaseRequestController extends Controller
                 ->join('statuses','purchase_requests.status_id','statuses.id')
                 ->select('purchase_requests.*','statuses.name as status')
                 ->get();
-            return view('pages.purchase.user.index',compact('requestData'));
+            return view('pages.requests.user.index',compact('requestData'));
         }
+
     }
     public function create()
     {

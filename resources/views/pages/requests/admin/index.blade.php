@@ -47,13 +47,10 @@
                         <td>{{$r->status}}</td>
                         <td>{{$r->created_at}}</td>
                         <td>
-
                             <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
                             <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.reject',['id'=>$r->id])}}">Reject</a>
                             <a role="button" class="btn btn-danger float-left" href="{{route('purchase.approved',['id'=>$r->id])}}">Approved</a>
-
                         </td>
-
                     </tr>
 
                     @php

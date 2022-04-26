@@ -1,14 +1,13 @@
 <?php
 
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
-use App\Models\PurchaseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -40,7 +39,10 @@ Route::post('purchase/approved/store',[PurchaseRequestController::class,'approve
 Route::post('purchase/reject/store',[PurchaseRequestController::class,'rejectStore'])->name('purchase.reject.store');
 Route::get('log',function(){
     Auth::logout();
-
-        return redirect('login');
+    return redirect('login');
 })->name('log');
 
+Route::get('role',[
+    'middleware' => 'role:editor',
+    'uses' => 'App\Http\Controllers\TestController@index',
+ ]);
