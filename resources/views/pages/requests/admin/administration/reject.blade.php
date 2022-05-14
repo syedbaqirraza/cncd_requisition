@@ -25,10 +25,11 @@
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Approve Request Form</h3>
+                  <h3 class="card-title">Reject Request Form</h3>
                 </div>
-            @if($errors->any())
+                @if($errors->any())
                 <div class="alert alert-danger">
+
                     <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -45,14 +46,14 @@
 
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('purchase.approved.store')}}" method="post">
+                <form action="{{route('purchase.reject.store.administration')}}" method="post">
                     @csrf
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Write Some Notes About This Request Approval</label>
-                      <textarea name="notes" row='20' class="form-control" placeholder="request notes"></textarea>
-                      <input type="hidden" value="{{ $request_log->request_id }}" name="request_id">
+                      <label for="exampleInputEmail1">Write Some Notes About This Request Rejection</label>
+                      <textarea name="description" row='20' class="form-control" placeholder="request description"></textarea>
                     </div>
+
                   </div>
                   <!-- /.card-body -->
 

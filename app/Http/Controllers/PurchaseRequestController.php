@@ -19,21 +19,51 @@ class PurchaseRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function approved($id)
+    public function itApproved($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.requests.admin.approved',compact('request_log'));
+        return view('pages.requests.admin.informationTechnology.approved',compact('request_log'));
     }
-
-    public function reject($id)
-    {
-        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.requests.admin.reject',compact('request_log'));
-    }
-    public function approvedStore(Request $request)
+    public function itApprovedStore(Request $request)
     {
         $user_id=auth()->user()->id;
+
         $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','inventory')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function itReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.informationTechnology.reject',compact('request_log'));
+    }
+    public function itRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
         $user=DB::table('users')
             ->join('departments','users.dept_id','departments.id')
             ->where('departments.name','administration')
@@ -52,8 +82,79 @@ class PurchaseRequestController extends Controller
         ]);
         return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
     }
+    public function administrationApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.administration.approved',compact('request_log'));
+    }
+    public function administrationApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
 
-    public function rejectStore(Request $request)
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function administrationReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.administration.reject',compact('request_log'));
+    }
+    public function administrationQuotation($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.administration.quatation',compact('request_log'));
+    }
+    public function administrationQuatationStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"quatation send")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','finance')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function administrationRejectStore(Request $request)
     {
         $user_id=auth()->user()->id;
 
@@ -75,10 +176,612 @@ class PurchaseRequestController extends Controller
             'forword_from_id'=>$user_id,
             'created_at'=>Carbon::now(),
         ]);
-
         return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
     }
+    public function callBackApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.callBack.approved',compact('request_log'));
+    }
+    public function callBackApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
 
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function callBackReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.callBack.reject',compact('request_log'));
+    }
+    public function callBackRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function dataScienceApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.dataScience.approved',compact('request_log'));
+    }
+    public function dataScienceApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function dataScienceReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.dataScience.reject',compact('request_log'));
+    }
+    public function dataScienceRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfBiochemistryApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfBiochemistry.approved',compact('request_log'));
+    }
+    public function departmentOfBiochemistryApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfBiochemistryReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfBiochemistry.reject',compact('request_log'));
+    }
+    public function departmentOfBiochemistryRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfHematologyApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfHematology.approved',compact('request_log'));
+    }
+    public function departmentOfHematologyApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfHematologyReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfHematology.reject',compact('request_log'));
+    }
+    public function departmentOfHematologyRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfMolecularApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfMolecular.approved',compact('request_log'));
+    }
+    public function departmentOfMolecularApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function departmentOfMolecularReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.departmentOfMolecular.reject',compact('request_log'));
+    }
+    public function departmentOfMolecularRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function financeApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.finance.approved',compact('request_log'));
+    }
+    public function financeApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by Finance")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function financeApprovedQuatationStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"quatation approved")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function financeApprovedQuatation($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.administration.quatation',compact('request_log'));
+    }
+    public function financeReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.finance.reject',compact('request_log'));
+    }
+    public function financeRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function hrApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.hr.approved',compact('request_log'));
+    }
+    public function hrApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function hrReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.hr.reject',compact('request_log'));
+    }
+    public function hrRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
+    public function inventoryAvailable($id)
+    {
+
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.inventory.approved',compact('request_log'));
+    }
+    public function inventoryAvailableStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"available")->first();
+        $complete_status_id=Status::where('name',"available")->first();
+
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function inventoryReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.inventory.reject',compact('request_log'));
+    }
+    public function inventoryBuyRequestStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+        $status_id=Status::where('name',"viewed")->first();
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','finance')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function inventoryIssue($id)
+    {
+        return 'ok';
+    }
+    public function qcApproved($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.qc.approved',compact('request_log'));
+    }
+    public function qcApprovedStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function qcReject($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.qc.reject',compact('request_log'));
+    }
+    public function qcRejectStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"approved by HOD")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+    }
     public function index()
     {
         $user_id=Auth::user()->id;
@@ -95,22 +798,132 @@ class PurchaseRequestController extends Controller
 
         else if($userRole=="admin")
         {
-            $requestData=DB::table('request_logs')
+            $data=DB::table('users')->join('departments','departments.id','users.dept_id')->where('users.id',$user_id)->select('departments.name as depart_name')->first();
+            if($data->depart_name=='administration')
+            {
+                $requestData=DB::table('purchase_requests')
+                ->join('request_logs','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->groupBy('request_logs.forword_to_id')
+                ->having('request_logs.forword_to_id','=',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.administration.index',compact('requestData'));
+            }
+            else if($data->depart_name=='information technology')
+            {
+                $requestData=DB::table('request_logs')
                 ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
-                ->join('statuses','request_logs.status','statuses.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
                 ->where('request_logs.forword_to_id',$user_id)
                 ->select('purchase_requests.*','statuses.name as status')
                 ->get();
-            return view('pages.requests.admin.index',compact('requestData'));
+                return view('pages.requests.admin.informationTechnology.index',compact('requestData'));
+            }
+            else if($data->depart_name=='finance')
+            {
+                $requestData=DB::table('purchase_requests')
+                ->join('request_logs','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->groupBy('request_logs.forword_to_id')
+                ->having('request_logs.forword_to_id','=',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.finance.index',compact('requestData'));
+            }
+            else if($data->depart_name=='HR')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.hr.index',compact('requestData'));
+            }
+            else if($data->depart_name=='data science')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.dataScience.index',compact('requestData'));
+            }
+            else if($data->depart_name=='call back')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.callBack.index',compact('requestData'));
+            }
+            else if($data->depart_name=='department of hematology')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.departmentOfHematology.index',compact('requestData'));
+            }
+            else if($data->depart_name=='department of molecular')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.departmentOfMolecular.index',compact('requestData'));
+            }
+            else if($data->depart_name=='department of biochemistry')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.departmentOfBiochemistry.index',compact('requestData'));
+            }
+            else if($data->depart_name=='QC')
+            {
+                $requestData=DB::table('request_logs')
+                ->join('purchase_requests','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('request_logs.forword_to_id',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.qc.index',compact('requestData'));
+            }
+            else if($data->depart_name=='inventory')
+            {
+
+                $requestData=DB::table('purchase_requests')
+                ->join('request_logs','request_logs.request_id','purchase_requests.id')
+                ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->groupBy('request_logs.forword_to_id')
+                ->having('request_logs.forword_to_id','=',$user_id)
+                ->select('purchase_requests.*','statuses.name as status')
+                ->get();
+                return view('pages.requests.admin.inventory.index',compact('requestData'));
+            }
+
         }
 
         else if($userRole=="user")
         {
             $requestData=DB::table('purchase_requests')
-                ->where('purchase_requests.user_id',$user_id)
                 ->join('statuses','purchase_requests.status_id','statuses.id')
+                ->where('purchase_requests.user_id',$user_id)
                 ->select('purchase_requests.*','statuses.name as status')
                 ->get();
+
             return view('pages.requests.user.index',compact('requestData'));
         }
 
@@ -120,15 +933,8 @@ class PurchaseRequestController extends Controller
         $data=Status::where('name','open')->first();
         $status_id=$data->id;
         $user_id=Auth::user()->id;
-        return view('pages.user.add',compact('status_id','user_id'));
+        return view('pages.requests.user.add',compact('status_id','user_id'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd('ok');
@@ -160,17 +966,8 @@ class PurchaseRequestController extends Controller
 
         return back()->with('success','Request Added Successfullly');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PurchaseRequest  $purchaseRequest
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-
-
        $data=DB::table('request_logs')
             ->join('purchase_requests','purchase_requests.id','request_logs.request_id')
             ->join('statuses','statuses.id','request_logs.status')
@@ -179,40 +976,18 @@ class PurchaseRequestController extends Controller
             ->where('request_logs.request_id',$id)
             ->select('request_logs.note as notes','request_logs.created_at as date_at','purchase_requests.description as item','purchase_requests.description as item','statuses.name as status','userTo.name as userToName','userFrom.name as userFromName')
             ->get();
-        return view('pages.user.logs',compact('data'));
+        return view('pages.logs.user.index',compact('data'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PurchaseRequest  $purchaseRequest
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $request=PurchaseRequest::find($id);
         return view('pages.user.edit',compact('request'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PurchaseRequest  $purchaseRequest
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request,$id)
     {
         PurchaseRequest::where('id',$id)->update(['description'=>$request->description]);
         return back()->with('success','Update Request Successfully');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PurchaseRequest  $purchaseRequest
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         PurchaseRequest::where('id',$id)->delete();

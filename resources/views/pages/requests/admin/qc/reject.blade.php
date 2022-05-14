@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Update Add</h1>
+            <h1>Request Process</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">Update Add</li>
+              <li class="breadcrumb-item active">Request Process</li>
             </ol>
           </div>
         </div>
@@ -25,34 +25,28 @@
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Request Form</h3>
+                  <h3 class="card-title">Reject Request Form</h3>
                 </div>
                 @if($errors->any())
-                <div class="alert alert-danger">
-
-                    <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            @if (session()->has('success'))
-                <div class="alert alert-success">{{ session()->get('success') }}</div>
-            @endif
-
-
-
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if(session()->has('success'))
+                    <div class="alert alert-success">{{ session()->get('success') }}</div>
+                @endif
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('purchase.update',['purchase'=>$request->id])}}" method="post">
+                <form action="{{route('purchase.reject.store.qc')}}" method="post">
                     @csrf
-                    @method('put')
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Write Your Request</label>
-                      <textarea name="description" row='20' class="form-control" placeholder="request description">{{$request->description}}</textarea>
+                      <label for="exampleInputEmail1">Write Some Notes About This Request Rejection</label>
+                      <textarea name="description" row='20' class="form-control" placeholder="request description"></textarea>
                     </div>
 
                   </div>
