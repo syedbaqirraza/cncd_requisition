@@ -33,7 +33,6 @@ Route::resource('role_type',StatusController::class);
 Route::put('user/status/{id}',[UserController::class,'statusUpdate'])->name('user.status.update');
 Route::resource('purchase',PurchaseRequestController::class);
 Route::get('purchase/destroy/{id}',[PurchaseRequestController::class,'destroy'])->name('purchase.destroy');
-
 Route::get('purchase/reject/{id}',[PurchaseRequestController::class,'reject'])->name('purchase.reject');
 Route::post('purchase/reject/store',[PurchaseRequestController::class,'rejectStore'])->name('purchase.reject.store');
 Route::get('log',function(){
@@ -50,11 +49,12 @@ Route::get('role',[
  Route::get('purchase/reject/IT{id}',[PurchaseRequestController::class,'itReject'])->name('purchase.reject.it');
 Route::post('purchase/reject/store/IT',[PurchaseRequestController::class,'itRejectStore'])->name('purchase.reject.store.it');
 
- Route::post('purchase/approved/administration',[PurchaseRequestController::class,'administrationApprovedStore'])->name('purchase.approved.administration.store');
- Route::get('purchase/approved/administration/{id}',[PurchaseRequestController::class,'administrationApproved'])->name('purchase.approved.administration');
+ Route::post('purchase/administration/deliver',[PurchaseRequestController::class,'administrationDeliverStore'])->name('purchase.administration.deliver.store');
+ Route::get('purchase/administration/deliver/{id}',[PurchaseRequestController::class,'administrationDeliver'])->name('purchase.administration.deliver');
  Route::get('purchase/quotation/administration/{id}',[PurchaseRequestController::class,'administrationQuotation'])->name('purchase.quotation.administration');
  Route::post('purchase/quotation/administration/store',[PurchaseRequestController::class,'administrationQuatationStore'])->name('purchase.quotation.administration.store');
- Route::get('purchase/reject/administration/{id}',[PurchaseRequestController::class,'administrationReject'])->name('purchase.reject.administration');
+ Route::get('purchase/administration/{id}',[PurchaseRequestController::class,'administrationPurchasing'])->name('purchase.administration');
+ Route::post('purchase/administration/store',[PurchaseRequestController::class,'administrationPurchasingStore'])->name('purchase.administration.store');
 Route::post('purchase/reject/administration/store',[PurchaseRequestController::class,'administrationRejectStore'])->name('purchase.reject.store.administration');
 
  Route::post('purchase/approved/call-back',[PurchaseRequestController::class,'callBackApprovedStore'])->name('purchase.approved.store.callBack');
@@ -86,6 +86,8 @@ Route::post('purchase/reject/department-of-molecular/store',[PurchaseRequestCont
  Route::get('purchase/approved/finance/{id}',[PurchaseRequestController::class,'financeApproved'])->name('purchase.approved.finance');
  Route::get('purchase/approved/finance/quatation/{id}',[PurchaseRequestController::class,'financeApprovedQuatation'])->name('purchase.approved.finance.quatation');
  Route::post('purchase/approved/finance/quatation/store',[PurchaseRequestController::class,'financeApprovedQuatationStore'])->name('purchase.approved.finance.quatation.store');
+ Route::get('purchase/finance/quatation/{id}',[PurchaseRequestController::class,'financeQuatation'])->name('purchase.quatation');
+ Route::post('purchase/finance/quatation/store',[PurchaseRequestController::class,'financeQuatationStore'])->name('purchase.finance.quatation.store');
  Route::get('purchase/reject/finance/{id}',[PurchaseRequestController::class,'financeReject'])->name('purchase.reject.finance');
 Route::post('purchase/reject/finance/store',[PurchaseRequestController::class,'financeRejectStore'])->name('purchase.reject.store.finance');
 
@@ -97,6 +99,7 @@ Route::post('purchase/reject/hr/store',[PurchaseRequestController::class,'hrReje
  Route::post('purchase/available/inventory/store',[PurchaseRequestController::class,'inventoryAvailableStore'])->name('purchase.available.store');
  Route::get('purchase/inventory/available-requested-item/{id}',[PurchaseRequestController::class,'inventoryAvailable'])->name('purchase.inventory.available');
  Route::get('purchase/inventory/issue-requested-item/{id}',[PurchaseRequestController::class,'inventoryIssue'])->name('purchase.inventory.issue');
+ Route::post('purchase/inventory/issue-requested-item/store',[PurchaseRequestController::class,'inventoryIssueStore'])->name('purchase.inventory.issue.store');
  Route::get('purchase/inventory/send-request-to-buy/{id}',[PurchaseRequestController::class,'inventoryReject'])->name('purchase.inventory.sendRequestToBuy');
 Route::post('purchase/inventory/send-request-to-buy',[PurchaseRequestController::class,'inventoryBuyRequestStore'])->name('purchase.inventory.sendRequestToBuy.store');
 
@@ -104,3 +107,6 @@ Route::post('purchase/inventory/send-request-to-buy',[PurchaseRequestController:
  Route::get('purchase/approved/qc/{id}',[PurchaseRequestController::class,'qcApproved'])->name('purchase.approved.qc');
  Route::get('purchase/reject/qc/{id}',[PurchaseRequestController::class,'qcReject'])->name('purchase.reject.qc');
 Route::post('purchase/reject/qc/store',[PurchaseRequestController::class,'qcRejectStore'])->name('purchase.reject.store.qc');
+
+Route::get('purchase/received/user/{id}',[PurchaseRequestController::class,'purchaseReceivedUser'])->name('purchase.received.user');
+Route::post('purchase/received/store',[PurchaseRequestController::class,'purchaseReceivedUserStore'])->name('purchase.received.user.store');

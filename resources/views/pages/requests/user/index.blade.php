@@ -48,10 +48,16 @@
                         <td>{{$r->created_at}}</td>
                         <td>
 
-                            <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
-                            <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.edit',['purchase'=>$r->id])}}">Edit</a>
-                            <a role="button" class="btn btn-danger float-left" href="{{route('purchase.destroy',['id'=>$r->id])}}">Delete</a>
 
+                            {{-- <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.edit',['purchase'=>$r->id])}}">Edit</a>
+                            <a role="button" class="btn btn-danger float-left" href="{{route('purchase.destroy',['id'=>$r->id])}}">Delete</a> --}}
+                            @if ($r->status=='issued')
+                                <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.received.user',['id'=>$r->id])}}">Did You Received?</a>
+
+                                <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
+                            @else
+                                <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
+                            @endif
                         </td>
 
                     </tr>

@@ -47,12 +47,19 @@
                         <td>{{$r->status}}</td>
                         <td>{{$r->created_at}}</td>
                         <td>
-                            <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
-                            <a role="button" class="btn btn-danger float-left mr-1" href="{{route('purchase.inventory.sendRequestToBuy',['id'=>$r->id])}}">Send Request To Buy</a>
+
                             @if ($r->status=='available')
                                 <a role="button" class="btn btn-success float-left" href="{{route('purchase.inventory.issue',['id'=>$r->id])}}">Issue</a>
-                                @else
+                                <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
+                            @elseif ($r->status=='deliver to inventory')
+                                <a role="button" class="btn btn-success float-left" href="{{route('purchase.inventory.issue',['id'=>$r->id])}}">Issue</a>
+                                <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
+                            @elseif ($r->status=='approved by HOD')
+                                <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
+                                <a role="button" class="btn btn-danger float-left mr-1" href="{{route('purchase.inventory.sendRequestToBuy',['id'=>$r->id])}}">Send Request To Buy</a>
                                 <a role="button" class="btn btn-success float-left" href="{{route('purchase.inventory.available',['id'=>$r->id])}}">Available</a>
+                            @else
+                            <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
                             @endif
 
                         </td>

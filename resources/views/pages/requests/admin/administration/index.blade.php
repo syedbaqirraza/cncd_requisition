@@ -48,9 +48,14 @@
                         <td>{{$r->created_at}}</td>
                         <td>
                             <a role="button" class="btn btn-info float-left mr-1" href="{{route('purchase.show',['purchase'=>$r->id])}}">Check Logs</a>
-                            <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.approved.finance.quatation',['id'=>$r->id])}}">Send Finance Quotation</a>
-                            <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.reject.administration',['id'=>$r->id])}}">Reject</a>
-                            <a role="button" class="btn btn-danger float-left" href="{{route('purchase.approved.administration',['id'=>$r->id])}}">Approved</a>
+                            @if($r->status=='approved by Finance')
+                                <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.approved.finance.quatation',['id'=>$r->id])}}">Send Finance Quotation</a>
+                            @elseif($r->status=='quatation approved')
+                                <a role="button" class="btn btn-success float-left mr-1" href="{{route('purchase.administration',['id'=>$r->id])}}">On Purchasing</a>
+                            @elseif($r->status=='on purchasing')
+                                <a role="button" class="btn btn-danger float-left" href="{{route('purchase.administration.deliver',['id'=>$r->id])}}">Deliver To Inventory</a>
+                            @else
+                            @endif
                         </td>
                     </tr>
 

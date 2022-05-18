@@ -82,16 +82,16 @@ class PurchaseRequestController extends Controller
         ]);
         return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
     }
-    public function administrationApproved($id)
+    public function administrationDeliver($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.requests.admin.administration.approved',compact('request_log'));
+        return view('pages.requests.admin.administration.deliver',compact('request_log'));
     }
-    public function administrationApprovedStore(Request $request)
+    public function administrationDeliverStore(Request $request)
     {
         $user_id=auth()->user()->id;
 
-        $status_id=Status::where('name',"approved by HOD")->first();
+        $status_id=Status::where('name',"deliver to inventory")->first();
 
         $user=DB::table('users')
             ->join('departments','users.dept_id','departments.id')
@@ -116,10 +116,10 @@ class PurchaseRequestController extends Controller
 
         return redirect()->back()->with('success','Request Farworded Succesfully');
     }
-    public function administrationReject($id)
+    public function administrationPurchasing($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
-        return view('pages.requests.admin.administration.reject',compact('request_log'));
+        return view('pages.requests.admin.administration.purchising',compact('request_log'));
     }
     public function administrationQuotation($id)
     {
@@ -154,11 +154,11 @@ class PurchaseRequestController extends Controller
 
         return redirect()->back()->with('success','Request Farworded Succesfully');
     }
-    public function administrationRejectStore(Request $request)
+    public function administrationPurchasingStore(Request $request)
     {
         $user_id=auth()->user()->id;
 
-        $status_id=Status::where('name',"approved by HOD")->first();
+        $status_id=Status::where('name',"on purchasing")->first();
 
         $user=DB::table('users')
             ->join('departments','users.dept_id','departments.id')
@@ -176,7 +176,10 @@ class PurchaseRequestController extends Controller
             'forword_from_id'=>$user_id,
             'created_at'=>Carbon::now(),
         ]);
-        return redirect()->route('requests.index')->with('success','Request Farworded Succesfully');
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+        return redirect()->back()->with('success','Request Farworded Succesfully');
     }
     public function callBackApproved($id)
     {
@@ -531,6 +534,40 @@ class PurchaseRequestController extends Controller
     {
         $user_id=auth()->user()->id;
 
+        $status_id=Status::where('name',"quatation send")->first();
+
+        $user=DB::table('users')
+            ->join('departments','users.dept_id','departments.id')
+            ->where('departments.name','administration')
+            ->select('users.id as farword_to_id')
+            ->first();
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->farword_to_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function financeQuatation($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.finance.quatation',compact('request_log'));
+    }
+    public function financeQuatationStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
         $status_id=Status::where('name',"quatation approved")->first();
 
         $user=DB::table('users')
@@ -717,12 +754,76 @@ class PurchaseRequestController extends Controller
     }
     public function inventoryIssue($id)
     {
-        return 'ok';
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.admin.inventory.issued',compact('request_log'));
     }
     public function qcApproved($id)
     {
         $request_log=DB::table('request_logs')->where('request_id',$id)->first();
         return view('pages.requests.admin.qc.approved',compact('request_log'));
+    }
+    public function inventoryIssueStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"issued")->first();
+
+        $user=DB::table('request_logs')
+            ->orderBy('id','asc')
+            ->where('request_id',$request->request_id)
+            ->first();
+
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->forword_from_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
+    }
+    public function purchaseReceivedUser($id)
+    {
+        $request_log=DB::table('request_logs')->where('request_id',$id)->first();
+        return view('pages.requests.user.received',compact('request_log'));
+    }
+    public function purchaseReceivedUserStore(Request $request)
+    {
+        $user_id=auth()->user()->id;
+
+        $status_id=Status::where('name',"received")->first();
+
+        $user=DB::table('request_logs')
+            ->orderBy('id','asc')
+            ->where('request_id',$request->request_id)
+            ->first();
+
+        $this->validate($request,[
+            'notes'=>'required',
+        ]);
+
+        RequestLog::create([
+            'note'=>$request->notes,
+            'request_id'=>$request->request_id,
+            'status'=>$status_id->id,
+            'forword_to_id'=>$user->forword_from_id,
+            'forword_from_id'=>$user_id,
+            'created_at'=>Carbon::now(),
+        ]);
+        PurchaseRequest::where('id',$request->request_id)->update([
+            'status_id'=>$status_id->id,
+        ]);
+
+        return redirect()->back()->with('success','Request Farworded Succesfully');
     }
     public function qcApprovedStore(Request $request)
     {

@@ -53,7 +53,7 @@
                                 <a role="button" class="btn btn-success float-left" href="{{route('purchase.approved.finance',['id'=>$r->id])}}">Approved</a>
                             @elseif($r->status=='quatation send')
                                 <a role="button" class="btn btn-danger float-left mr-1" href="{{route('purchase.reject.finance',['id'=>$r->id])}}">Reject</a>
-                                <a role="button" class="btn btn-success float-left" href="{{route('purchase.approved.finance.quatation',['id'=>$r->id])}}">Approve Quatation</a>
+                                <a role="button" class="btn btn-success float-left" href="{{route('purchase.quatation',['id'=>$r->id])}}">Approve Quatation</a>
                             @endif
 
                         </td>
